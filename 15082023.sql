@@ -86,14 +86,29 @@ BEGIN
 END;
 	
 -- Ex003 - média de idades
+DECLARE
+    ages NUMBER := 0;
+	average NUMBER := 0;
+	random_age NUMBER;
+	counter NUMBER(1) := 1;
+BEGIN
+    LOOP
+    	random_age := TRUNC(DBMS_RANDOM.VALUE(1, 100));
+		DBMS_OUTPUT.PUT_LINE('Idade n°'|| counter|| ': '|| random_age);
+		ages := ages + random_age;
+		counter := counter + 1;
+		EXIT WHEN counter > 5;
+	END LOOP;
+	average := ages / 5;
+	DBMS_OUTPUT.PUT_LINE(CHR(10)|| 'A média de idades é: '|| TRUNC(average));
+END;
 
 -- Ex004 - impapar
 DECLARE
-    iterations NUMBER := 10;
     random_num NUMBER;
 	counter NUMBER(2) := 0;
 BEGIN
-    FOR i IN 1..iterations LOOP
+    FOR i IN 1..10 LOOP
         random_num := TRUNC(DBMS_RANDOM.VALUE(1, 101));
 		DBMS_OUTPUT.PUT_LINE(random_num);
         IF MOD(random_num, 2) = 0 THEN
