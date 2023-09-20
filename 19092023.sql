@@ -1,3 +1,4 @@
+-- ex001
 create table fornecedor (
   	n_for number(5) primary key,
     nome varchar2(15) not null,
@@ -38,3 +39,44 @@ BEGIN
 END;
 
 SELECT * FROM fornecedor;
+
+-- ex002
+CREATE TABLE aluno(
+    ra NUMBER(2) PRIMARY KEY,
+    disciplina VARCHAR2(20) NOT NULL,
+    media NUMBER(2, 1) NOT NULL,
+    carga_hora NUMBER(3) NOT NULL,
+    faltas NUMBER(3) NOT NULL,
+    situacao VARCHAR2(15)
+);
+
+-- 001
+BEGIN
+    INSERT INTO aluno (ra, disciplina, media, carga_hora, faltas) VALUES(1, 'PLSQL', 8.5, 100, 10);
+    INSERT INTO aluno (ra, disciplina, media, carga_hora, faltas) VALUES(2, 'SQL', 5, 100, 10);
+    INSERT INTO aluno (ra, disciplina, media, carga_hora, faltas) VALUES(3, 'C++', 8, 100, 70);
+    INSERT INTO aluno (ra, disciplina, media, carga_hora, faltas) VALUES(4, 'HTML', 2, 100, 10);
+	INSERT INTO aluno (ra, disciplina, media, carga_hora, faltas) VALUES(5, 'JAVA', 2, 100, 70);
+END;
+
+-- 002
+DECLARE
+    CURSOR c_aluno IS SELECT * FROM aluno;
+BEGIN
+    FOR v_aluno IN c_aluno LOOP
+    	IF v_aluno.media >= 7 AND v_aluno.faltas < (v_aluno.carga_hora * 0.25) THEN
+    		UPDATE aluno SET situacao = 'Aprovado' WHERE ra = v_aluno.ra;
+    		DBMS_OUTPUT.PUT_LINE('Aluno: '|| v_aluno.ra|| CHR(10)|| 'Situação: '|| v_aluno.situacao|| CHR(10));
+
+		ELSIF v_aluno.media > 4.5 AND v_aluno.media < 6.9 AND v_aluno.faltas < (v_aluno.carga_hora * 0.25) THEN
+    		UPDATE aluno SET situacao = 'Exame' WHERE ra = v_aluno.ra;
+    		DBMS_OUTPUT.PUT_LINE('Aluno: '|| v_aluno.ra|| CHR(10)|| 'Situação: '|| v_aluno.situacao|| CHR(10));
+
+        ELSE
+    		UPDATE aluno SET situacao = 'Reprovado' WHERE ra = v_aluno.ra;
+    		DBMS_OUTPUT.PUT_LINE('Aluno: '|| v_aluno.ra|| CHR(10)|| 'Situação: '|| v_aluno.situacao|| CHR(10));
+		END IF;
+	END LOOP;
+END;
+
+SELECT * FROM aluno;
